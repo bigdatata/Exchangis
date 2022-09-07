@@ -84,11 +84,12 @@ public class JobUtils {
                 StringWriter sw = new StringWriter();
                 DateTool dataTool = new DateTool(time);
                 String symbol = matcher.group(1);
+                String lineSymbol = matcher.group(2);
                 boolean spec = false;
                 if (null != symbol) {
                     String startTime = null;
                     String tempTime = null;
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     if ("run_date".equals(symbol)) {
                         int n = 1;
                         if (m.split("-").length > 1) {
@@ -97,7 +98,10 @@ public class JobUtils {
                         }
                         calendar.setTime(date);
                         calendar.add(Calendar.DAY_OF_MONTH, -n);
-                        tempTime = format.format(calendar.getTime()).substring(0, 10) + " 00:00:00";
+                        tempTime = format.format(calendar.getTime());
+                        if(!DateTool.LINE_SYMBOL.equals(lineSymbol)){
+                            tempTime=tempTime.replaceAll("-","");
+                        }
                         startTime = template.replace(m, tempTime);
                         return startTime;
                     }
